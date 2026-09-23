@@ -35,6 +35,7 @@ final class NodeKind
     public const NOT_IN_EXPR   = 10;
     public const LIKE_EXPR     = 11;
     public const NOT_LIKE_EXPR = 12;
+    public const UNARY_OP      = 13;
 }
 
 final class WhenClause

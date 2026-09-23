@@ -29,6 +29,8 @@ final class Lexer
         'NVL'      => TokenType::FN_COALESCE,
         'ABS'      => TokenType::FN_ABS,
         'CONCAT'   => TokenType::FN_CONCAT,
+        'LEAST'    => TokenType::FN_LEAST,
+        'GREATEST' => TokenType::FN_GREATEST,
         'EVENT'    => TokenType::FN_EVENT,
     ];
 
@@ -126,6 +128,9 @@ final class Lexer
             if (self::isIdentStart($c)) {
                 $start = $i;
                 while ($i < $n && self::isIdentCont($input[$i])) {
+                    $i++;
+                }
+                if ($i < $n && $input[$i] === '?') {
                     $i++;
                 }
                 $text = \substr($input, $start, $i - $start);

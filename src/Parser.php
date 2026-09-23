@@ -217,10 +217,13 @@ final class Parser
     private function parseInList(): array
     {
         $this->expect(TokenType::LPAREN);
-        $items = [$this->parseLogical()];
-        while ($this->peekType() === TokenType::COMMA) {
-            $this->advance();
-            $items[] = $this->parseLogical();
+        $items = [];
+        if ($this->peekType() !== TokenType::RPAREN) {
+            $items[] = $this->parsePrimary();
+            while ($this->peekType() === TokenType::COMMA) {
+                $this->advance();
+                $items[] = $this->parsePrimary();
+            }
         }
         $this->expect(TokenType::RPAREN);
         return $items;
@@ -280,6 +283,13 @@ final class Parser
         $tt = $this->peekType();
 
         switch ($tt) {
+            case TokenType::MINUS:
+                $this->advance();
+                $node = new AstNode(NodeKind::UNARY_OP);
+                $node->op = BinOp::MINUS;
+                $node->expr = $this->parsePrimary();
+                return $node;
+
             case TokenType::NUMBER:
                 $tok = $this->advance();
                 $node = new AstNode(NodeKind::NUMBER_LIT);
@@ -327,6 +337,8 @@ final class Parser
             case TokenType::FN_COALESCE:
             case TokenType::FN_ABS:
             case TokenType::FN_CONCAT:
+            case TokenType::FN_LEAST:
+            case TokenType::FN_GREATEST:
             case TokenType::FN_EVENT:
                 return $this->parseFunctionCall();
 
@@ -374,6 +386,8 @@ final class Parser
             TokenType::FN_COALESCE => 'COALESCE',
             TokenType::FN_ABS      => 'ABS',
             TokenType::FN_CONCAT   => 'CONCAT',
+            TokenType::FN_LEAST    => 'LEAST',
+            TokenType::FN_GREATEST => 'GREATEST',
             TokenType::FN_EVENT    => 'EVENT',
         ];
         $name = $nameMap[$tok->type];
