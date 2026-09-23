@@ -18,17 +18,17 @@ final class Dsqlex
     /**
      * Evaluate a pre-parsed AST with the given context.
      */
-    public static function eval(AstNode $ast, Context $ctx): Value
+    public static function eval(AstNode $ast, Context $ctx, ?EvalOptions $opts = null): Value
     {
-        return Evaluator::evaluate($ast, $ctx);
+        return Evaluator::evaluate($ast, $ctx, $opts);
     }
 
     /**
      * Parse and evaluate in one call.
      */
-    public static function evalString(string $expression, Context $ctx): Value
+    public static function evalString(string $expression, Context $ctx, ?EvalOptions $opts = null): Value
     {
         $ast = self::parse($expression);
-        return self::eval($ast, $ctx);
+        return self::eval($ast, $ctx, $opts);
     }
 }

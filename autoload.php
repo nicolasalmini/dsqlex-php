@@ -8,7 +8,23 @@ spl_autoload_register(function (string $class): void {
         return;
     }
     $relativeClass = substr($class, strlen($prefix));
-    $file = __DIR__ . '/src/' . str_replace('\\', '/', $relativeClass) . '.php';
+    $map = [
+        'Token'       => 'Token.php',
+        'TokenType'   => 'Token.php',
+        'Lexer'       => 'Lexer.php',
+        'AstNode'     => 'Ast.php',
+        'NodeKind'    => 'Ast.php',
+        'BinOp'       => 'Ast.php',
+        'WhenClause'  => 'Ast.php',
+        'Parser'      => 'Parser.php',
+        'Evaluator'   => 'Evaluator.php',
+        'Value'       => 'Evaluator.php',
+        'ValueType'   => 'Evaluator.php',
+        'Context'     => 'Evaluator.php',
+        'EvalOptions' => 'Evaluator.php',
+        'Dsqlex'      => 'Dsqlex.php',
+    ];
+    $file = __DIR__ . '/src/' . ($map[$relativeClass] ?? str_replace('\\', '/', $relativeClass) . '.php');
     if (file_exists($file)) {
         require $file;
     }

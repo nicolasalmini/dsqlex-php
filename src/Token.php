@@ -44,6 +44,8 @@ final class TokenType
     public const LPAREN     = 35;
     public const RPAREN     = 36;
     public const COMMA      = 37;
+    public const FN_LEAST   = 38;
+    public const FN_GREATEST = 39;
 }
 
 final class Token
